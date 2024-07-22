@@ -10,4 +10,19 @@ Description: Wrapper functions and pipeline for phasing and MNV identification,
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Depends: tidyverse
+Depends:
+    tidyverse,
+    karyoploteR,
+    tibble,
+    data.table,
+    parallel
+Imports:
+    tidyverse,
+    karyoploteR,
+    tibble,
+    data.table,
+    parallel
+URL: https://github.com/Bioinformatics-Department-C-BIG/MNVR
+BugReports: https://github.com/Bioinformatics-Department-C-BIG/MNVR/issues
+biocViews: Visualization, MultiNucleotideVariants, Sequencing, Coverage, DNASeq, MNV
+NeedsCompilation: no
