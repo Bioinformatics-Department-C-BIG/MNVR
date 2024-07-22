@@ -3,7 +3,23 @@ Type: Package
 Title: Multi Nucleotide Variant (MNV) Analaysis in R
 Version: 0.1.0
 Date: 2024-07-11
-Author: Marios Tomazou
+Authors@R: 
+  c(person(given = "Marios",
+           family = "Tomazou",
+           role = c("aut", "cre"),
+           email = "mariost@cing.ac.cy",
+           comment = c(ORCID = "0000-0002-0836-5579")),
+    person(given = "Styliana",
+           family = "Menelaou",
+           role = c("aut"),
+           email = "stylianam@cing.ac.cy",
+           ),
+    person(given = "Konstantinos",
+           family = "Panagiotou",
+           role = c("aut"),
+           email = "konstantinosp@cing.ac.cy",
+           )
+           )
 Maintainer: Marios Tomazou <mariost@cing.ac.cy>
 Description: Wrapper functions and pipeline for phasing and MNV identification,
   consequence annotation and analaysis from VCF/BAM files
