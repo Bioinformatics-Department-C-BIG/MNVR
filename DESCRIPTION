@@ -1,0 +1,13 @@
+Package: MNVR
+Type: Package
+Title: Multi Nucleotide Variant (MNV) Analaysis in R
+Version: 0.1.0
+Date: 2024-07-11
+Author: Marios Tomazou
+Maintainer: Marios Tomazou <mariost@cing.ac.cy>
+Description: Wrapper functions and pipeline for phasing and MNV identification,
+  consequence annotation and analaysis from VCF/BAM files
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Depends: tidyverse
