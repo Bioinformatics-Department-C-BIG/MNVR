@@ -1,7 +1,7 @@
-CSQfilter<-function(OUTPUTcsq=NULL,HGNC='/home/konstantinosp/tools/hgnc_complete_set.txt'){
+CSQfilter<-function(OUTPUTcsq=NULL,HGNC='/home/konstantinosp/tools/hgnc_complete_set.txt',OUTpath=NULL){
 
 
-
+  outpath<-OUTpath
   hgnc<-read.delim(HGNC,header = T)
   hgnc$ENselect<-str_match(hgnc$mane_select,'(ENST.+)\\|.+')[,2]
   hgnc$ENselect <- gsub('\\..+','',hgnc$ENselect)

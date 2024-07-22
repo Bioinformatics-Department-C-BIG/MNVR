@@ -1,6 +1,8 @@
-indir<-dir('/home/mariost/depts/MC/out240712/variant_calling/deepvariant/',pattern = '.+t.vcf.gz$',full.names = T,recursive = T)
-bamdir<-dir('/home/mariost/depts/MC/out240712/preprocessing/markduplicates/',pattern = '.+bam$',full.names = T,recursive = T)
-bamdir<-bamdir[!grepl('edit',bamdir)]
+indir<-dir('/home/mariost/depts/BG/malekou/out240704/variant_calling/deepvariant/',pattern = '.+t.vcf.gz$',full.names = T,recursive = T)
+bamdir<-dir('/home/mariost/depts/BG/malekou/out240704/preprocessing/markduplicates/',pattern = '.+bam$',full.names = T,recursive = T)
+bamdir<-bamdir[!grepl('edit|Joint',bamdir)]
+indir<-indir[!grepl('edit|Joint',indir)]
+library(tidyverse)
 library(parallel)
 cores<-detectCores()
 MNVR_pipeline<-function(vcfdir=NULL,bamdir=NULL,whpath='~/.local/bin/whatshap',bcftpath='/usr/bin/bcftools',outpath=NULL,HGNC='/home/konstantinosp/tools/hgnc_complete_set.txt',gffpath=NULL,reference=NULL,hgnc=NULL){
@@ -76,7 +78,7 @@ BCFcsq(vcf = OUTPUTpass,ref = reference,out = OUTPUTcsqi,args = args,bcftpath = 
 
 system(paste0('tabix -f -p vcf ',OUTPUTcsqi))
 
-CSQfilter(OUTPUTcsq = OUTPUTcsqi)
+CSQfilter(OUTPUTcsq = OUTPUTcsqi,HGNC='/home/konstantinosp/tools/hgnc_complete_set.txt',OUTpath = outpath)
 
  },mc.cores = ifelse(nrow(samples)<=ceiling(0.9*cores),nrow(samples),ceiling(0.9*cores)))
 #},mc.cores = 1)
@@ -101,12 +103,12 @@ mclapply(c(1:nrow(samples)),function(s){
   # vcfn<-VCF
   vcfn<-gsub('.+/','',VCF)
 
-  OUTPUT<-paste0(outpath,gsub('.vcf.gz$','.WH.vcf.gz',vcfn))
+OUTPUT<-paste0(outpath,gsub('.vcf.gz$','.WH.vcf.gz',vcfn))
 OUTPUTcsqi<-gsub('.WH.vcf.gz$','.WHcsq.vcf.gz',OUTPUT)
 CSQfilter(OUTPUTcsq = OUTPUTcsqi)
 },mc.cores = ifelse(nrow(samples)<=ceiling(0.9*cores),nrow(samples),ceiling(0.9*cores)))
 
-MNVR_pipeline(outpath = '/home/mariost/depts/BI/MNV/outPACK240712/',
+MNVR_pipeline(outpath = '/home/mariost/depts/BI/MNV/outPACK240704/',
               vcfdir =indir,
               bamdir =bamdir
 
