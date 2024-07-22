@@ -2,7 +2,7 @@
 \alias{BCFcsq}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-A Capitalized Title (ideally limited to 65 characters)
+Predict MNV consequences using bcftools csq
 }
 \description{
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~

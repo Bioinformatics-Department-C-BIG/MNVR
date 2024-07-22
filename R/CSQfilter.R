@@ -1,10 +1,8 @@
-CSQfilter<-function(OUTPUTcsq=NULL,HGNC='/home/konstantinosp/tools/hgnc_complete_set.txt',OUTpath=NULL){
+CSQfilter<-function(OUTPUTcsq=NULL,HGNC=NULL,OUTpath=NULL){
 
 
   outpath<-OUTpath
-  hgnc<-read.delim(HGNC,header = T)
-  hgnc$ENselect<-str_match(hgnc$mane_select,'(ENST.+)\\|.+')[,2]
-  hgnc$ENselect <- gsub('\\..+','',hgnc$ENselect)
+
 
 
   bcf <- read.table(OUTPUTcsq)
@@ -48,6 +46,11 @@ CSQfilter<-function(OUTPUTcsq=NULL,HGNC='/home/konstantinosp/tools/hgnc_complete
   bcf_mnvs_tidy <-bcf_mnvs_tidy[grepl('missense$', bcf_mnvs_tidy$consequence) | grepl('^synonymous$', bcf_mnvs_tidy$consequence) | grepl('^stop_gained$', bcf_mnvs_tidy$consequence),]
   bcf_mnvs_tidy$consequence[ bcf_mnvs_tidy$consequence=='*missense']<-'missense'
 
+if(!is.null(HGNC)){
+  hgnc<-read.delim(HGNC,header = T)
+  hgnc$ENselect<-str_match(hgnc$mane_select,'(ENST.+)\\|.+')[,2]
+  hgnc$ENselect <- gsub('\\..+','',hgnc$ENselect)
+}
   bcf_mnvs_tidy<-bcf_mnvs_tidy[which(bcf_mnvs_tidy$transcript%in% hgnc$ENselect),]
 
   bcf_mnvs_tidy <- na.omit(bcf_mnvs_tidy)

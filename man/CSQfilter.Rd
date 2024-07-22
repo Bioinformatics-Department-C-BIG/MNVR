@@ -5,16 +5,23 @@
 A Capitalized Title (ideally limited to 65 characters)
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+Filtering function for bcftools csq output for selecting MNVs on canonical or alternative transcripts
 }
 \usage{
-CSQfilter(OUTPUTcsq = NULL)
+CSQfilter(OUTPUTcsq = NULL, HGNC = "/home/konstantinosp/tools/hgnc_complete_set.txt", OUTpath=NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{OUTPUTcsq}{
-%%     ~~Describe \code{OUTPUTcsq} here~~
+  Input. bcftools csq file in .vcf.gz format
 }
+  \item{HGNC}{
+    For selecting consequences for only canonical trasncripts (MANE select). HGNC dataset in (.txt format) for identifying the canonical transcript for each gene symbol. Recommended download from ('https://g-a8b222.dd271.03c0.data.globus.org/pub/databases/genenames/hgnc/tsv/locus_types/gene_with_protein_product.txt')
+}
+  \item{OUTpath}{
+    The path for saving the output file
+}
+
 }
 \details{
 %%  ~~ If necessary, more details than the description above ~~
@@ -47,8 +54,12 @@ CSQfilter(OUTPUTcsq = NULL)
 ##--	or standard data sets, see data().
 
 ## The function is currently defined as
-function (OUTPUTcsq = NULL)
+function (OUTPUTcsq = NULL, HGNC = "/home/konstantinosp/tools/hgnc_complete_set.txt")
 {
+    hgnc <- read.delim(HGNC, header = T)
+    hgnc$ENselect <- str_match(hgnc$mane_select, "(ENST.+)\\|.+")[,
+        2]
+    hgnc$ENselect <- gsub("\\..+", "", hgnc$ENselect)
     bcf <- read.table(OUTPUTcsq)
     colnames(bcf)[-ncol(bcf)] <- c("CHR", "POS", "ID", "REF",
         "ALT", "QUAL", "FILTER", "INFO", "FORMAT")
@@ -56,12 +67,7 @@ function (OUTPUTcsq = NULL)
         pattern = ",") + 1, .after = "INFO")
     distance_threshold <- 2
     sn <- str_match(OUTPUTcsq, ".+/(.+)\\..+vcf.gz$")[, 2]
-    indm <- which(diff(as.numeric(as.factor(bcf[, 1]))) == 0 &
-        diff(as.numeric(bcf$POS)) <= distance_threshold)
-    ind <- c(indm, (indm + 1))
-    ind <- unique(ind[order(ind)])
-    bcf_mnvs <- bcf[ind, ]
-    bcf_mnvs_PASS <- bcf_mnvs[bcf_mnvs$FILTER == "PASS", ]
+    bcf_mnvs_PASS <- bcf[bcf$FILTER == "PASS", ]
     bcf_mnvs_PASS$INFO <- gsub("BCSQ=", "", bcf_mnvs_PASS$INFO)
     bcf_mnvs_PASS <- bcf_mnvs_PASS[grepl(".>.\\+.", bcf_mnvs_PASS$INFO),
         ]
@@ -81,6 +87,9 @@ function (OUTPUTcsq = NULL)
         temp <- cbind.data.frame(temp, csq)
         bcf_mnvs_tidy <- rbind.data.frame(bcf_mnvs_tidy, temp)
     }
+    ind <- grep("\\+", bcf_mnvs_tidy$dna_change)
+    ind <- unique(ind[order(ind)])
+    bcf_mnvs_tidy <- bcf_mnvs_tidy[ind, ]
     bcf_mnvs_tidy <- bcf_mnvs_tidy[grepl("missense$", bcf_mnvs_tidy$consequence) |
         grepl("^synonymous$", bcf_mnvs_tidy$consequence) | grepl("^stop_gained$",
         bcf_mnvs_tidy$consequence), ]
