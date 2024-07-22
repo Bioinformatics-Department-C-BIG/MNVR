@@ -41,3 +41,11 @@ or
 build from source
 
 <https://samtools.github.io/bcftools/>
+
+
+## Authors
+
+Marios Tomazou, PhD CING Bioinformatics Department (mariost@cing.ac.cy)
+Konstantinos Panagiotou, BSc CING Bioinformatics Department (konstantinosp@cing.ac.cy)
+Athina Theodosiou, PhD CING Cytogenetics Department (athinat@cing.ac.cy)
+Styliana Menelaou, MSc CING Bioinformatics Department (stylianam@cing.ac.cy)
