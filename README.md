@@ -4,7 +4,12 @@ Wrapper functions and pipeline for phasing and MNV identification, consequence a
 
 ## Getting Started
 
-You can install this package in R using the following devtools command: require('devtools') install_github("Bioinformatics-Department-C-BIG/MNVR")
+You can install this package in R using the following devtools command:
+
+```         
+require('devtools')
+install_github("Bioinformatics-Department-C-BIG/MNVR")
+```
 
 ## External dependencies
 
@@ -36,4 +41,3 @@ or
 build from source
 
 <https://samtools.github.io/bcftools/>
-
