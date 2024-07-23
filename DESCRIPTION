@@ -31,13 +31,19 @@ Depends:
     karyoploteR,
     tibble,
     data.table,
-    parallel
+    parallel,
+    Rsamtools,
+    vcfR,
+    gridExtra
 Imports:
     tidyverse,
     karyoploteR,
     tibble,
     data.table,
-    parallel
+    parallel,
+    Rsamtools,
+    vcfR,
+    gridExtra
 URL: https://github.com/Bioinformatics-Department-C-BIG/MNVR
 BugReports: https://github.com/Bioinformatics-Department-C-BIG/MNVR/issues
 biocViews: Visualization, MultiNucleotideVariants, Sequencing, Coverage, DNASeq, MNV

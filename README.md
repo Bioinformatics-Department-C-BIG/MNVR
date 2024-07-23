@@ -6,7 +6,7 @@ Wrapper functions and pipeline for phasing and MNV identification, consequence a
 
 You can install this package in R using the following devtools command:
 
-```         
+```
 require('devtools')
 install_github("Bioinformatics-Department-C-BIG/MNVR")
 ```
@@ -19,19 +19,19 @@ This package requires WhatsHap and bcftools already installed on a linux system.
 
 WhatsHap can be installed either using pip
 
-```         
+```
 pip3 install --user whatshap
 ```
 
 or conda
 
-```         
+```
 conda create -n whatshap-env whatshap
 ```
 
 bcftools can be installed using:
 
-```         
+```
 
 sudo apt install bcftools
 ```
@@ -42,10 +42,12 @@ build from source
 
 <https://samtools.github.io/bcftools/>
 
-
 ## Authors
 
-Marios Tomazou, PhD CING Bioinformatics Department (mariost@cing.ac.cy)
-Konstantinos Panagiotou, BSc CING Bioinformatics Department (konstantinosp@cing.ac.cy)
-Athina Theodosiou, PhD CING Cytogenetics Department (athinat@cing.ac.cy)
-Styliana Menelaou, MSc CING Bioinformatics Department (stylianam@cing.ac.cy)
+Marios Tomazou, PhD CING Bioinformatics Department ([mariost\@cing.ac.cy](mailto:mariost@cing.ac.cy){.email})
+
+Konstantinos Panagiotou, BSc CING Bioinformatics Department ([konstantinosp\@cing.ac.cy](mailto:konstantinosp@cing.ac.cy){.email})
+
+Athina Theodosiou, PhD CING Cytogenetics Department ([athinat\@cing.ac.cy](mailto:athinat@cing.ac.cy){.email})
+
+Styliana Menelaou, MSc CING Bioinformatics Department ([stylianam\@cing.ac.cy](mailto:stylianam@cing.ac.cy){.email})
