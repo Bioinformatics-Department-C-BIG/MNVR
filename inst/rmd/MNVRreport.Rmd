@@ -1,0 +1,107 @@
+---
+title: "MNVR report"
+author: "C-BIG (CING Bioinformatics Department)"
+date: "`r Sys.Date()`"
+output: html_document
+params:
+  datainput: ""
+---
+<style type="text/css">
+.main-container {
+  max-width: 1800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+table.dataTable {
+    clear: both;
+    margin-top: 6px !important;
+    margin-bottom: 6px !important;
+    max-width: none !important;
+    border-collapse: separate !important;
+    border-spacing: 0;
+    font-size: smaller;
+}
+.has-feedback .form-control {
+    padding-right: 20.5px;
+    font-size: smaller;
+}
+
+</style>
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,warning = FALSE, message = FALSE)
+
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars, echo=FALSE}
+library(DT)
+library(tidyverse)
+library(gridExtra)
+library(karyoploteR)
+dft<-params$datainput
+
+nsamples<-length(unique(dft$sample))
+dfs<-dft[,c(1,2,13,14,15)]%>%group_by(sample,consequence) %>% summarise_each(n_distinct)
+
+dfst<-dft[,c(1,2,13,14,15)] %>% summarise_all(n_distinct)
+
+dfs<-as.data.frame(rbind.data.frame(dfst,dfs))
+dfs[1,c(1,ncol(dfs))]<-c('All','All')
+
+dt<-DT::datatable(dfs[,-1],rownames = dfs$sample,autoHideNavigation = T,extensions = 'Buttons',
+                  options = list(pageLength=10,autoWidth = TRUE,
+                                 dom = 'Bfrtip',
+                                 buttons = list('pageLength', 'colvis','excel','csv',list(
+                                                            extend = 'pdf',
+                                                            pageSize = 'A2',
+                                                            orientation = 'landscape',
+                                                            filename = 'tt'
+                                                    ))
+                                 )
+                  )%>%DT::formatStyle(columns = colnames(dfs)[-1], fontSize = '75%')
+dt
+
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+
+p1<-ggplot(dft,aes(y=consequence,fill=consequence))+geom_bar(stat = 'count',show.legend = F)+theme_bw()
+print(p1)
+p2<-ggplot(dft,aes(y=POS-POS2,fill=consequence))+geom_bar(stat = 'count',show.legend = T)+theme_bw()+ylab('Distance between SNPs (bp)')
+
+grid.arrange(grobs=list(p1,p2),nrow=1)
+dfs<-dft
+dfs$POS<-ifelse(dft$POS<=dft$POS2,dft$POS,dft$POS2)
+dfs$POS2<-ifelse(dft$POS<=dft$POS2,dft$POS2,dft$POS)
+dfs$CHR<-paste0('chr',dfs$CHR)
+gr<-makeGRangesFromDataFrame(dfs,keep.extra.columns = F,ignore.strand = T,seqnames.field = 'CHR',seqinfo = Seqinfo(unique(dfs$CHR)),start.field = 'POS',end.field = 'POS2')
+
+  ccod<-list('missense'='orange','synonymous'='royalblue','stop_gained'='orangered')
+ p3<- plotKaryotype()%>% karyoploteR::kpPlotDensity(data=gr,data.panel = 2,col="#CCCCFF") %>%
+    karyoploteR::kpPoints(chr = paste0('chr',dft$CHR),x=dft$POS,y=0.2, col=as.vector(unlist(ccod[dft$consequence])))
+dt<-DT::datatable(dft[c(1:50),],rownames = F,autoHideNavigation = T,extensions = 'Buttons',
+                  options = list(pageLength=20,autoWidth = TRUE,
+                                 dom = 'Bfrtip',
+                                 buttons = list('pageLength', 'colvis','excel','csv',list(
+                                                            extend = 'pdf',
+                                                            pageSize = 'A2',
+                                                            orientation = 'landscape',
+                                                            filename = 'tt'
+                                                    ))
+                                 ),
+                  filter = 'top')%>%DT::formatStyle(columns = colnames(dft), fontSize = '75%')
+dt
+
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

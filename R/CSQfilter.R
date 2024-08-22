@@ -1,7 +1,6 @@
-CSQfilter<-function(OUTPUTcsq=NULL,HGNC=NULL,OUTpath=NULL,vcf_format=T,ref=NULL){
+CSQfilter<-function(OUTPUTcsq=NULL,HGNC=NULL,outpath=NULL,vcf_format=T,ref=NULL){
 
 
-  outpath<-OUTpath
 
   bcf <- read.table(OUTPUTcsq)
   colnames(bcf)[-ncol(bcf)]<-c('CHR','POS','ID','REF','ALT','QUAL','FILTER','INFO','FORMAT')
@@ -65,12 +64,12 @@ CSQfilter<-function(OUTPUTcsq=NULL,HGNC=NULL,OUTpath=NULL,vcf_format=T,ref=NULL)
   temp$ALT2<-ifelse(temp$match,temp$V3,temp$V6)
   temp$greater<-temp$POS<temp$POS2
   gr<-GRanges(seqnames = temp$CHR,ranges=IRanges(start = ifelse(temp$greater,temp$POS,temp$POS2),end = ifelse(temp$greater,temp$POS2,temp$POS)))
-  idx<-scanFaIndex(reference)
-  dna<-scanFa(reference,gr)
+  # idx<-scanFaIndex(reference)
+  dna<-scanFa(ref,gr)
   temp$REFmnv<-as.vector(as.data.frame(dna))[[1]]
   temp$DIFF<-abs(temp$POS2-temp$POS)
   seqin<-GRanges(seqnames = temp$CHR,ranges=IRanges(start = ifelse(temp$greater,temp$POS,temp$POS2)+1,end = ifelse(temp$greater,temp$POS,temp$POS2)+temp$DIFF-1))
-  dnain<-scanFa(reference,seqin)
+  dnain<-scanFa(ref,seqin)
 
   temp$DIFFseq<-as.vector(as.data.frame(dnain))[[1]]
   temp$ALTmnv<-paste0(ifelse(temp$greater,temp$ALT,temp$ALT2),temp$DIFFseq,ifelse(temp$greater,temp$ALT2,temp$ALT))

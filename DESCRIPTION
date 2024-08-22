@@ -29,7 +29,6 @@ LazyData: true
 Depends:
     tidyverse,
     karyoploteR,
-    tibble,
     data.table,
     parallel,
     Rsamtools,
@@ -38,7 +37,6 @@ Depends:
 Imports:
     tidyverse,
     karyoploteR,
-    tibble,
     data.table,
     parallel,
     Rsamtools,

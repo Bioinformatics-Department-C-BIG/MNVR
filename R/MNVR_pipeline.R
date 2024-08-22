@@ -27,7 +27,7 @@ ncores<-ifelse(nrow(samples)<=ceiling(0.9*detectCores()),nrow(samples),ceiling(0
 
 
 
-ALLRES<<-mclapply(c(1:nrow(samples)),function(s,refp=reference,whp=whpath,bcftp=bcftpath,gffp=gffpath,outp=outpath){
+ALLRES<-mclapply(c(1:nrow(samples)),function(s,refp=reference,whp=whpath,bcftp=bcftpath,gffp=gffpath,outp=outpath){
 
     VCF<-samples$VCF[s]
     BAM<-samples$BAM[s]
@@ -42,6 +42,7 @@ ALLRES<<-mclapply(c(1:nrow(samples)),function(s,refp=reference,whp=whpath,bcftp=
 
     args<-c('--distrust-genotypes --include-homozygous',paste('--changed-genotype-list',OUTtxt))
     #
+    print(VCF)
     WHphase(vcf=VCF,bam = BAM,ref=refp, out=OUTPUT,args=args,whpath = whp)
     #
     system(paste0('tabix -f -p vcf ',OUTPUT))

@@ -18,10 +18,15 @@ CSQfilter(OUTPUTcsq = NULL, HGNC = "/home/konstantinosp/tools/hgnc_complete_set.
   \item{HGNC}{
     For selecting consequences for only canonical trasncripts (MANE select). HGNC dataset in (.txt format) for identifying the canonical transcript for each gene symbol. Recommended download from ('https://g-a8b222.dd271.03c0.data.globus.org/pub/databases/genenames/hgnc/tsv/locus_types/gene_with_protein_product.txt')
 }
-  \item{OUTpath}{
+  \item{outpath}{
     The path for saving the output file
 }
-
+  \item{vcf_format}{
+    Save a .vcf.gz formated output file for further processing with other tools like VEP.
+}
+  \item{ref}{
+Reference genome file in '.fasta' format. Must be accompanied by .fai index (created with samtools faidx)
+}
 }
 \details{
 %%  ~~ If necessary, more details than the description above ~~

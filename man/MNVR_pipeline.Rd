@@ -27,7 +27,7 @@ MNVR_pipeline(vcfdir = NULL, bamdir = NULL, whpath = "~/.local/bin/whatshap", bc
   \item{outpath}{
     Path of the output directory. This will be create if it does not exist. User must have write permissions for the specific path
 }
-  \item{HGNC}{
+  \item{hgnc}{
     For selecting consequences for only canonical trasncripts (MANE select). HGNC dataset in (.txt format) for identifying the canonical transcript for each gene symbol. Recommended download from ('https://g-a8b222.dd271.03c0.data.globus.org/pub/databases/genenames/hgnc/tsv/locus_types/gene_with_protein_product.txt')
 
 }
@@ -36,7 +36,10 @@ Gene anotation file in '.gff3' format. Gene models and coordinates must match th
 
 }
   \item{reference}{
-Reference genome file in '.fasta' format. Must be accompanied by .fai index (create with samtools faidx)
+Reference genome file in '.fasta' format. Must be accompanied by .fai index (created with samtools faidx)
+}
+  \item{keep_temp}{
+Keep intermediate files (default FALSE)
 }
 
 }
