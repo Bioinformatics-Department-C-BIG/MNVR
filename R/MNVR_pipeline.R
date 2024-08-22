@@ -27,7 +27,7 @@ ncores<-ifelse(nrow(samples)<=ceiling(0.9*detectCores()),nrow(samples),ceiling(0
 
 
 
-ALLRES<-mclapply(c(1:nrow(samples)),function(s,refp=reference,whp=whpath,bcftp=bcftpath,gffp=gffpath,outp=outpath){
+ALLRESm<-mclapply(c(1:nrow(samples)),function(s,refp=reference,whp=whpath,bcftp=bcftpath,gffp=gffpath,outp=outpath){
 
     VCF<-samples$VCF[s]
     BAM<-samples$BAM[s]
@@ -43,11 +43,11 @@ ALLRES<-mclapply(c(1:nrow(samples)),function(s,refp=reference,whp=whpath,bcftp=b
     args<-c('--distrust-genotypes --include-homozygous',paste('--changed-genotype-list',OUTtxt))
     #
     print(VCF)
-    WHphase(vcf=VCF,bam = BAM,ref=refp, out=OUTPUT,args=args,whpath = whp)
+     WHphase(vcf=VCF,bam = BAM,ref=refp, out=OUTPUT,args=args,whpath = whp)
     #
     system(paste0('tabix -f -p vcf ',OUTPUT))
     #
-    WHstat(vcf = OUTPUT,whpath = whp,out=OUTstat)
+    sdf<-WHstat(vcf = OUTPUT,whpath = whp,out=OUTstat)
 
     OUTPUTpass<-gsub('.WH.vcf.gz$','.WHPASS.vcf.gz',OUTPUT)
 
@@ -57,24 +57,40 @@ ALLRES<-mclapply(c(1:nrow(samples)),function(s,refp=reference,whp=whpath,bcftp=b
 
     args<-c('--phase a --local-csq ')
 
-    BCFcsq(vcf = OUTPUTpass,ref = refp,out = OUTPUTcsqi,args = args,bcftpath = bcftp,gff = gffp)
+     BCFcsq(vcf = OUTPUTpass,ref = refp,out = OUTPUTcsqi,args = args,bcftpath = bcftp,gff = gffp)
     system(paste0('tabix -f -p vcf ',OUTPUTcsqi))
 
     OUTPUTcsqi<-gsub('.WH.vcf.gz$','.WHcsq.vcf.gz',OUTPUT)
     args<-c('--phase a')
 
-    BCFcsq(vcf = OUTPUTpass,ref = refp,out = OUTPUTcsqi,args = args,bcftpath = bcftp,gff = gffp)
+     BCFcsq(vcf = OUTPUTpass,ref = refp,out = OUTPUTcsqi,args = args,bcftpath = bcftp,gff = gffp)
 
     system(paste0('tabix -f -p vcf ',OUTPUTcsqi))
 
     res<-CSQfilter(OUTPUTcsq = OUTPUTcsqi,HGNC=hgnc,OUTpath = outp,ref = refp,vcf_format = T)
 
 
-   return(res)
+   return(list(EXP=res,SUM=sdf))
   },mc.cores = ncores)
+print('finish')
 
-Allres<-as.data.frame(rbindlist(ALLRES))
 
+ALLres<-as.data.frame(rbindlist(
+
+  lapply(ALLRESm,function(x){return(x[['EXP']])})
+
+  ))
+print(head(ALLres))
+# Allres<-as.data.frame(rbindlist(ALLRES))
+
+ALLsum<-as.data.frame(rbindlist(
+
+  lapply(ALLRESm,function(x){return(x[['SUM']])})
+))
+
+# Allsum<-as.data.frame(rbindlist(ALLSUM))
+
+print('finish2')
 
 if(!keep_temp){
 
@@ -82,8 +98,7 @@ if(!keep_temp){
   flist<-flist[!grepl('.tsv$|MNV.vcf.gz$|.pdf$|WHstats.txt$',flist)]
   file.remove(flist)
 }
-
-return(Allres)
-
+print('finish3')
+return(list(ALLres,ALLsum))
 
 }

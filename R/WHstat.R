@@ -10,7 +10,7 @@ WHstat<-function(vcf=NULL,whpath='~/.local/bin/whatshap',out=NULL){
   )
   system(str)
 
-  whs<-read.delim('../outPACK240712/49594.deepvariant.WHstats.txt',sep = "")
+  whs<-read.delim(out,sep = "")
   cin<-which(whs$statistics=='Chromosome'|whs$statistics=='ALL')
   chr<-whs$for.[cin]
   chr[length(chr)]<-'All'

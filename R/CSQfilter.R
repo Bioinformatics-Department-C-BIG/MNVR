@@ -15,7 +15,7 @@ CSQfilter<-function(OUTPUTcsq=NULL,HGNC=NULL,outpath=NULL,vcf_format=T,ref=NULL)
   mnvind<-grepl('.>.\\+.', bcf_PASS$INFO)
   bcf_mnvs_PASS <- bcf_PASS[mnvind,]
 
-
+print('here')
 
 
 
